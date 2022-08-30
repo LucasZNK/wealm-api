@@ -1,0 +1,22 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Investment {
+  _id: ID!
+  title: String!
+  description: String!
+}
+
+type Query {
+  investment: [Investment!]!
+}
+
+type Mutation {
+  createInvestment(input: CreateInvestmentInput!): Investment!
+}
+
+input CreateInvestmentInput {
+  title: String!
+  description: String!
+}
