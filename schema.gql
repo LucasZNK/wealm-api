@@ -2,6 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  _id: ID!
+  username: String!
+  email: String!
+  password: String!
+}
+
 type Investment {
   _id: ID!
   title: String!
@@ -13,7 +20,14 @@ type Query {
 }
 
 type Mutation {
+  signUp(input: CreateUserInput!): User!
   createInvestment(input: CreateInvestmentInput!): Investment!
+}
+
+input CreateUserInput {
+  username: String!
+  email: String!
+  password: String!
 }
 
 input CreateInvestmentInput {
