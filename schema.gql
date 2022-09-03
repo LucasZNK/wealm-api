@@ -9,6 +9,11 @@ type User {
   password: String!
 }
 
+type LoginResponse {
+  access_token: String!
+  user: User!
+}
+
 type Investment {
   _id: ID!
   title: String!
@@ -20,8 +25,14 @@ type Query {
 }
 
 type Mutation {
-  signUp(input: CreateUserInput!): User!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
+  registerUser(input: CreateUserInput!): User!
   createInvestment(input: CreateInvestmentInput!): Investment!
+}
+
+input LoginUserInput {
+  username: String!
+  password: String!
 }
 
 input CreateUserInput {

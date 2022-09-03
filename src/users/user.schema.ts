@@ -15,7 +15,7 @@ export class User {
   @Field()
   username: string;
 
-  @Prop({ required: false })
+  @Prop({ required: true })
   @Field()
   email: string;
 
