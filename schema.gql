@@ -9,9 +9,15 @@ type User {
   password: String!
 }
 
+type UserSecured {
+  _id: ID
+  username: String
+  email: String
+}
+
 type LoginResponse {
   access_token: String!
-  user: User!
+  user: UserSecured!
 }
 
 type Investment {
