@@ -14,7 +14,7 @@ export class AuthResolver {
   @UseGuards(GqlAuthGuard)
   login(
     @Args('loginUserInput') loginUserInput: LoginUserInput,
-    @Context() context, // Can do this because i have the auth user from the context in the guard
+    @Context() context, // Context get the user from the Guard!
   ) {
     return this.authService.login(context.user);
   }

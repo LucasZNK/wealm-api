@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/users/user.schema';
 import { UsersService } from 'src/users/users.service';
-import { LoginResponse } from './dto/login-response';
+import { UserSecured } from './dto/login-response';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private userService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
   async validateUser(
     username: string,
@@ -18,15 +22,19 @@ export class AuthService {
     if (user && user.password === password) {
       // Add bcrypt hashing
       const { password, ...securedUser } = user;
+
       return securedUser;
     }
 
     return null;
   }
 
-  async login(user: User) {
+  async login(user: UserSecured) {
     return {
-      access_token: 'jwt',
+      access_token: this.jwtService.sign({
+        username: user.username,
+        sub: user._id,
+      }),
       user,
     };
   }
