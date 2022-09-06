@@ -21,4 +21,13 @@ export class UsersService {
 
     return user;
   }
+
+  async findAll() {
+    const users = await this.userModel.find().exec();
+    if (!users) {
+      throw new NotFoundException();
+    }
+
+    return users;
+  }
 }

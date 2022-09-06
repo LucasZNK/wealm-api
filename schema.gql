@@ -27,6 +27,7 @@ type Investment {
 }
 
 type Query {
+  findAll: [User!]!
   investment: [Investment!]!
 }
 
