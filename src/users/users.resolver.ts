@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { CreateUserInput, User } from './user.schema';
 import { UseGuards } from '@nestjs/common';
@@ -15,9 +15,14 @@ export class UsersResolver {
 
   @Query(() => [User])
   @UseGuards(JwtAuthGuard)
-  async findAll() {
-    // REVISAR ESTE METODO
-    return [];
-    // return this.userService.findAll();
+  async findAll(@Context() context) {
+    // context has  the user , for example i can pass to get the user details
+    return this.userService.findAll();
+  }
+
+  @Query(() => [User])
+  @UseGuards(JwtAuthGuard)
+  async getUserInfo() {
+    // return this.getUserInfo(context.username)
   }
 }

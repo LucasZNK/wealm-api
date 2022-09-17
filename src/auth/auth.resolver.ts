@@ -12,10 +12,25 @@ export class AuthResolver {
 
   @Mutation(() => LoginResponse)
   @UseGuards(GqlAuthGuard)
-  login(
+  signinpLocal(
     @Args('loginUserInput') loginUserInput: LoginUserInput,
     @Context() context, // Context get the user from the Guard!
   ) {
-    return this.authService.login(context.user);
+    return this.authService.signinLocal(context.user);
+  }
+
+  @Mutation(() => User)
+  signUpLocal(@Args('loginUserInput') loginUserInput: LoginUserInput) {
+    return this.authService.signupLocal(loginUserInput);
+  }
+
+  @Mutation(() => User)
+  logout(@Args('loginUserInput') loginUserInput: LoginUserInput) {
+    return this.authService.logout();
+  }
+
+  @Mutation(() => User)
+  refreshTokens(@Args('loginUserInput') loginUserInput: LoginUserInput) {
+    return this.authService.refreshTokens(loginUserInput);
   }
 }
