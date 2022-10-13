@@ -6,12 +6,11 @@ import { InvestmentType } from './investment.type';
 @Resolver((of) => Investment)
 export class InvestmentResolver {
   constructor(private investmentService: InvestmentService) {}
-  
-  @Query(() => [Investment])
-  async investment() {
-    return this.investmentService.findMany()
-  }
 
+  @Query(() => [Investment])
+  async getInvestment() {
+    return this.investmentService.getInvestment();
+  }
 
   @Mutation(() => Investment)
   async createInvestment(@Args('input') investment: CreateInvestmentInput) {

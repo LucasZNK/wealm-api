@@ -1,6 +1,6 @@
 import { Field, ID, InputType, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsEmail, IsString, isString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 import mongoose from 'mongoose';
 
 export type UserDocument = User & mongoose.Document;

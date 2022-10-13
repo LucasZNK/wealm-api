@@ -29,12 +29,14 @@ type Investment {
 type Query {
   findAll: [User!]!
   getUserInfo: [User!]!
-  investment: [Investment!]!
+  getInvestment: [Investment!]!
 }
 
 type Mutation {
-  login(loginUserInput: LoginUserInput!): LoginResponse!
-  signup(loginUserInput: LoginUserInput!): User!
+  signinpLocal(loginUserInput: LoginUserInput!): LoginResponse!
+  signUpLocal(loginUserInput: LoginUserInput!): User!
+  logout(loginUserInput: LoginUserInput!): User!
+  refreshTokens(loginUserInput: LoginUserInput!): User!
   registerUser(input: CreateUserInput!): User!
   createInvestment(input: CreateInvestmentInput!): Investment!
 }

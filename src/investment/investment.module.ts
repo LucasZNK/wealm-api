@@ -5,7 +5,11 @@ import { Investment, InvestmentSchema } from './investment.schema';
 import { InvestmentService } from './investment.service';
 
 @Module({
-    imports:[MongooseModule.forFeature([{name:Investment.name, schema:InvestmentSchema}])],
-    providers:[InvestmentResolver, InvestmentService]
+  imports: [
+    MongooseModule.forFeature([
+      { name: Investment.name, schema: InvestmentSchema },
+    ]),
+  ],
+  providers: [InvestmentResolver, InvestmentService],
 })
 export class InvestmentModule {}
