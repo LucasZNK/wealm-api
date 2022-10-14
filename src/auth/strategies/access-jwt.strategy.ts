@@ -11,7 +11,7 @@ export class AccessJwtStrategy extends PassportStrategy(
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'hide-me', // TODO: Move to environment variable, reuse secret
+      secretOrKey: 'at-secret', // TODO: Move to environment variable, reuse secret
     });
   }
 

@@ -25,6 +25,35 @@ export class AuthService implements OnModuleDestroy, OnModuleInit {
     return bcrypt.hash(data, 10);
   }
 
+  async getTokens(userId: number, email: string): Promise<Tokens> {
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(
+        {
+          sub: userId,
+          email,
+        },
+        {
+          secret: 'at-secret', // TODO : USE ENV VARIABLE
+          expiresIn: 60 * 15,
+        },
+      ),
+      this.jwtService.signAsync(
+        {
+          sub: userId,
+          email,
+        },
+        {
+          secret: 'rt-secret', // TODO : USE ENV VARIABLE
+          expiresIn: 60 * 60 * 24 * 7,
+        },
+      ),
+    ]);
+    return {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    };
+  }
+
   async validateUser(
     username: string,
     password: string,
@@ -61,10 +90,13 @@ export class AuthService implements OnModuleDestroy, OnModuleInit {
       throw new Error('User already exists');
     }
 
-    const newUser = this.userModel.create({
+    const newUser = await this.userModel.create({
       ...userInfo,
       password: hashedPassword,
     });
+
+    const tokens = await this.getTokens(newUser.id, newUser.email);
+    return tokens;
     // Investigate how to manage unique usernames mongoose
   }
 

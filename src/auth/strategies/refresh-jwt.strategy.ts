@@ -12,7 +12,7 @@ export class RefreshJwtStrategy extends PassportStrategy(
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'hide-me', // TODO: Move to environment variable, reuse secret
+      secretOrKey: 'rt-token', // TODO: Move to environment variable, reuse secret
       passReqToCallback: true,
     });
   }
