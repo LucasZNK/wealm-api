@@ -5,7 +5,7 @@ import { UsersModule } from 'src/users/users.module';
 import { AuthResolver } from './auth.resolver';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './strategies/jwt.strategy';
+import { AccessJwtStrategy, RefreshJwtStrategy } from './strategies/';
 import { UsersService } from 'src/users/users.service';
 
 @Module({
@@ -23,7 +23,8 @@ import { UsersService } from 'src/users/users.service';
     AuthService,
     AuthResolver,
     LocalStrategy,
-    JwtStrategy,
+    AccessJwtStrategy,
+    RefreshJwtStrategy,
     UsersService,
   ],
 })

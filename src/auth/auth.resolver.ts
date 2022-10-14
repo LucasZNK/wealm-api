@@ -1,3 +1,4 @@
+import { Tokens } from './types/tokens.type';
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
@@ -13,8 +14,8 @@ export class AuthResolver {
   @Mutation(() => LoginResponse)
   @UseGuards(GqlAuthGuard)
   @Mutation(() => User)
-  async registerLocal(@Args('input') user: CreateUserInput): Promise<User> {
-    return this.authService.registerUser(user);
+  async registerLocal(@Args('input') user: CreateUserInput): Promise<Tokens> {
+    return this.authService.registerLocal(user);
   }
 
   loginLocal(
