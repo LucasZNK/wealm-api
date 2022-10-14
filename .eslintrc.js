@@ -16,11 +16,11 @@ module.exports = {
     },
     ecmaVersion: 12,
     sourceType: 'module',
-    project: './tsconfig.json',
   },
   plugins: ['@typescript-eslint', 'prettier'],
   rules: {
-    '@typescript-eslint/no-empty-function': 'warn',
+    'no-empty-function': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
   },
   ignorePatterns: ['src/generated/*'],
 };
