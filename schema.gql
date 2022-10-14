@@ -33,20 +33,20 @@ type Query {
 }
 
 type Mutation {
-  login(loginUserInput: LoginUserInput!): LoginResponse!
-  signUpLocal(loginUserInput: LoginUserInput!): User!
-  registerUser(input: CreateUserInput!): User!
+  registerLocal(input: CreateUserInput!): LoginResponse!
+  logout: User!
+  refreshTokens(loginUserInput: LoginUserInput!): User!
   createInvestment(input: CreateInvestmentInput!): Investment!
-}
-
-input LoginUserInput {
-  username: String!
-  password: String!
 }
 
 input CreateUserInput {
   username: String!
   email: String!
+  password: String!
+}
+
+input LoginUserInput {
+  username: String!
   password: String!
 }
 

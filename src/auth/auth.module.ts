@@ -6,6 +6,7 @@ import { AuthResolver } from './auth.resolver';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { UsersService } from 'src/users/users.service';
 
 @Module({
   imports: [
@@ -18,6 +19,12 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       secret: 'hide-me', //TODO: Move this to env variable.
     }),
   ],
-  providers: [AuthService, AuthResolver, LocalStrategy, JwtStrategy],
+  providers: [
+    AuthService,
+    AuthResolver,
+    LocalStrategy,
+    JwtStrategy,
+    UsersService,
+  ],
 })
 export class AuthModule {}

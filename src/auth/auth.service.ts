@@ -1,13 +1,17 @@
+import { CreateUserInput, UserDocument } from './../users/user.schema';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { User } from 'src/users/user.schema';
 import { UsersService } from 'src/users/users.service';
 import { UserSecured } from './dto/login-response';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserInput } from './dto/login-user.input';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class AuthService implements OnModuleDestroy, OnModuleInit {
   constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
     private userService: UsersService,
     private jwtService: JwtService,
   ) {}
@@ -34,7 +38,7 @@ export class AuthService implements OnModuleDestroy, OnModuleInit {
     return null;
   }
 
-  async signinLocal(user: UserSecured) {
+  async loginLocal(user: UserSecured) {
     return {
       access_token: this.jwtService.sign({
         username: user.username,
@@ -44,15 +48,13 @@ export class AuthService implements OnModuleDestroy, OnModuleInit {
     };
   }
 
-  async signupLocal(loginUserInput: LoginUserInput) {
-    const user = await this.userService.findOne(loginUserInput.username);
+  async registerUser(userInfo: CreateUserInput) {
+    const user = await this.userService.findOne(userInfo.email);
     if (user) {
       throw new Error('User already exists');
     }
-    // Investigate how to manage unique usernames mongoose
-  }
 
-  async signInLocal(loginUserInput: LoginUserInput) {
+    return this.userModel.create(userInfo);
     // Investigate how to manage unique usernames mongoose
   }
 

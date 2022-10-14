@@ -1,31 +1,31 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { User } from 'src/users/user.schema';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { LoginResponse } from './dto/login-response';
 import { LoginUserInput } from './dto/login-user.input';
 import { GqlAuthGuard } from './guards/gql-auth.guard';
+import { CreateUserInput, User } from '../users/user.schema';
 
-@Resolver((of) => User)
+@Resolver(() => User)
 export class AuthResolver {
   constructor(private authService: AuthService) {}
 
   @Mutation(() => LoginResponse)
   @UseGuards(GqlAuthGuard)
-  signinpLocal(
+  @Mutation(() => User)
+  async registerLocal(@Args('input') user: CreateUserInput): Promise<User> {
+    return this.authService.registerUser(user);
+  }
+
+  loginLocal(
     @Args('loginUserInput') loginUserInput: LoginUserInput,
     @Context() context, // Context get the user from the Guard!
   ) {
-    return this.authService.signinLocal(context.user);
+    return this.authService.loginLocal(context.user);
   }
 
   @Mutation(() => User)
-  signUpLocal(@Args('loginUserInput') loginUserInput: LoginUserInput) {
-    return this.authService.signupLocal(loginUserInput);
-  }
-
-  @Mutation(() => User)
-  logout(@Args('loginUserInput') loginUserInput: LoginUserInput) {
+  logout() {
     return this.authService.logout();
   }
 

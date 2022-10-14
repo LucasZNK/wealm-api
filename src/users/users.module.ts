@@ -14,6 +14,14 @@ import { UsersResolver } from './users.resolver';
     ]),
   ],
   providers: [UsersService, UsersResolver],
-  exports: [UsersService],
+  exports: [
+    UsersService,
+    MongooseModule.forFeature([
+      {
+        name: User.name,
+        schema: UserSchema,
+      },
+    ]),
+  ],
 })
 export class UsersModule {}
