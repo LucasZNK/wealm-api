@@ -54,6 +54,12 @@ export class AuthService implements OnModuleDestroy, OnModuleInit {
     };
   }
 
+  async updateRefreshTokenHash(_id: number, refreshToken: string) {
+    const hash = await this.hashData(refreshToken);
+    await this.userModel.findByIdAndUpdate(_id, {
+      hashedRefreshToken: hash,
+    });
+  }
   async validateUser(
     username: string,
     password: string,
@@ -96,8 +102,8 @@ export class AuthService implements OnModuleDestroy, OnModuleInit {
     });
 
     const tokens = await this.getTokens(newUser.id, newUser.email);
+    await this.updateRefreshTokenHash(newUser._id, tokens.refresh_token);
     return tokens;
-    // Investigate how to manage unique usernames mongoose
   }
 
   async logout() {}
