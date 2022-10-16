@@ -9,9 +9,8 @@ export class UsersResolver {
   constructor(private userService: UsersService) {}
 
   @Query(() => [User])
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async findAll(@Context() context) {
-    // context has  the user , for example i can pass to get the user details
     return this.userService.findAll();
   }
 

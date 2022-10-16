@@ -9,15 +9,9 @@ type User {
   password: String!
 }
 
-type UserSecured {
-  _id: ID
-  username: String
-  email: String
-}
-
-type LoginResponse {
+type RegisterUserResponse {
   access_token: String!
-  user: UserSecured!
+  refresh_token: String!
 }
 
 type Investment {
@@ -33,7 +27,7 @@ type Query {
 }
 
 type Mutation {
-  registerLocal(input: CreateUserInput!): LoginResponse!
+  registerLocal(input: CreateUserInput!): RegisterUserResponse!
   logout: User!
   refreshTokens(loginUserInput: LoginUserInput!): User!
   createInvestment(input: CreateInvestmentInput!): Investment!

@@ -6,15 +6,16 @@ import { LoginResponse } from './dto/login-response';
 import { LoginUserInput } from './dto/login-user.input';
 import { GqlAuthGuard } from './guards/gql-auth.guard';
 import { CreateUserInput, User } from '../users/user.schema';
+import { RegisterUserResponse } from './dto/register-response';
 
-@Resolver(() => User)
+@Resolver(() => RegisterUserResponse)
 export class AuthResolver {
   constructor(private authService: AuthService) {}
 
-  @Mutation(() => LoginResponse)
-  @UseGuards(GqlAuthGuard)
-  @Mutation(() => User)
-  async registerLocal(@Args('input') user: CreateUserInput): Promise<Tokens> {
+  @Mutation(() => RegisterUserResponse)
+  async registerLocal(
+    @Args('input') user: CreateUserInput,
+  ): Promise<RegisterUserResponse> {
     return this.authService.registerLocal(user);
   }
 

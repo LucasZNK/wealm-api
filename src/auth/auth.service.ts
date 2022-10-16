@@ -89,12 +89,13 @@ export class AuthService implements OnModuleDestroy, OnModuleInit {
   }
 
   async registerLocal(userInfo: CreateUserInput): Promise<Tokens> {
-    const user = await this.userService.findOne(userInfo.email);
-    const hashedPassword = await this.hashData(userInfo.password);
+    const user = await this.userModel.findOne({ email: userInfo.email });
+    console.log(user);
 
     if (user) {
       throw new Error('User already exists');
     }
+    const hashedPassword = await this.hashData(userInfo.password);
 
     const newUser = await this.userModel.create({
       ...userInfo,

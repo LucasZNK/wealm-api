@@ -7,9 +7,9 @@ import { User, UserDocument } from './user.schema';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async findOne(username: string) {
+  async findOne(email: string) {
     const user = await this.userModel.findOne({
-      username: username,
+      email,
     });
     if (!user) {
       throw new NotFoundException();
