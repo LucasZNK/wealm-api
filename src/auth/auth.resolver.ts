@@ -1,10 +1,6 @@
-import { Tokens } from './types/tokens.type';
-import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { LoginResponse } from './dto/login-response';
 import { LoginUserInput } from './dto/login-user.input';
-import { GqlAuthGuard } from './guards/gql-auth.guard';
 import { CreateUserInput, User } from '../users/user.schema';
 import { RegisterUserResponse } from './dto/register-response';
 

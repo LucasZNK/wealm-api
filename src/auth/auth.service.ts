@@ -9,6 +9,7 @@ import { LoginUserInput } from './dto/login-user.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+
 @Injectable()
 export class AuthService implements OnModuleDestroy, OnModuleInit {
   constructor(
@@ -17,13 +18,45 @@ export class AuthService implements OnModuleDestroy, OnModuleInit {
     private jwtService: JwtService,
   ) {}
 
-  onModuleDestroy() {}
+  /**
+   * It creates a new user in the database, hashes the password, and returns a set of tokens
+   * @param {CreateUserInput} userInfo - CreateUserInput
+   * @returns Tokens
+   */
 
-  onModuleInit() {}
+  async registerLocal(userInfo: CreateUserInput): Promise<Tokens> {
+    const user = await this.userModel.findOne({ email: userInfo.email });
+
+    if (user) {
+      throw new Error('User already exists');
+    }
+    const hashedPassword = await this.hashData(userInfo.password);
+
+    const newUser = await this.userModel.create({
+      ...userInfo,
+      password: hashedPassword,
+    });
+
+    const tokens = await this.getTokens(newUser.id, newUser.email);
+    await this.updateRefreshTokenHash(newUser._id, tokens.refresh_token);
+    return tokens;
+  }
+
+  async logout() {}
+
+  async refreshTokens(loginUserInput: LoginUserInput) {}
 
   hashData(data: string) {
     return bcrypt.hash(data, 10);
   }
+
+  /**
+   * It returns a promise that resolves to an object containing two JWT tokens, one for access and one
+   * for refresh
+   * @param {number} userId - The user's ID
+   * @param {string} email - The email address of the user.
+   * @returns Tokens
+   */
 
   async getTokens(userId: number, email: string): Promise<Tokens> {
     const [accessToken, refreshToken] = await Promise.all([
@@ -60,13 +93,16 @@ export class AuthService implements OnModuleDestroy, OnModuleInit {
       hashedRefreshToken: hash,
     });
   }
-  async validateUser(
-    username: string,
-    password: string,
-  ): Promise<Partial<User>> {
-    const user = await (<User>(
-      (await this.userService.findOne(username)).toJSON()
-    ));
+
+  /**
+   * "If the user exists and the password matches, return the user
+   * @param {string} email - string - The email of the user
+   * @param {string} password - The password to validate.
+   * @returns The user object with the password removed.
+   */
+
+  async validateUser(email: string, password: string): Promise<Partial<User>> {
+    const user = await (<User>(await this.userService.findOne(email)).toJSON());
 
     if (user && user.password === password) {
       // Add bcrypt hashing
@@ -81,33 +117,14 @@ export class AuthService implements OnModuleDestroy, OnModuleInit {
   async loginLocal(user: UserSecured) {
     return {
       access_token: this.jwtService.sign({
-        username: user.username,
+        email: user.email,
         sub: user._id,
       }),
       user,
     };
   }
 
-  async registerLocal(userInfo: CreateUserInput): Promise<Tokens> {
-    const user = await this.userModel.findOne({ email: userInfo.email });
-    console.log(user);
+  onModuleDestroy() {}
 
-    if (user) {
-      throw new Error('User already exists');
-    }
-    const hashedPassword = await this.hashData(userInfo.password);
-
-    const newUser = await this.userModel.create({
-      ...userInfo,
-      password: hashedPassword,
-    });
-
-    const tokens = await this.getTokens(newUser.id, newUser.email);
-    await this.updateRefreshTokenHash(newUser._id, tokens.refresh_token);
-    return tokens;
-  }
-
-  async logout() {}
-
-  async refreshTokens(loginUserInput: LoginUserInput) {}
+  onModuleInit() {}
 }
